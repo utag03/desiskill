@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="profile-container">
+
+  <div class="profile-header">
+    <div class="profile-avatar">{{ user.name[0].upper() }}</div>
+    <div>
+      <h1>{{ user.name }}</h1>
+      <p>{{ user.college }} · Member since {{ user.created_at }}</p>
+    </div>
+  </div>
+
+  {% if success %}
+  <div class="alert-success">{{ success }}</div>
+  {% endif %}
+
+  <div class="profile-grid">
+
+    <!-- Edit Profile Form -->
+    <div class="profile-card">
+      <h2>Edit Profile</h2>
+      <form method="POST" action="/profile">
+
+        <div class="form-group">
+          <label>Bio</label>
+          <textarea name="bio" rows="3" placeholder="Tell others about yourself...">{{ user.bio or '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Skills I can teach</label>
+          <input type="text" name="skills_offered"
+            placeholder="e.g. Python, Figma, Math"
+            value="{{ user.skills_offered | join(', ') if user.skills_offered else '' }}">
+          <small>Separate with commas</small>
+        </div>
+
+        <div class="form-group">
+          <label>Skills I want to learn</label>
+          <input type="text" name="skills_wanted"
+            placeholder="e.g. Video Editing, Public Speaking"
+            value="{{ user.skills_wanted | join(', ') if user.skills_wanted else '' }}">
+          <small>Separate with commas</small>
+        </div>
+
+        <button type="submit" class="btn-auth">Save Profile</button>
+      </form>
+    </div>
+
+    <!-- Profile Preview -->
+    <div class="profile-card">
+      <h2>Your Profile</h2>
+
+      <div class="profile-bio">
+        <p>{{ user.bio or 'No bio yet — add one!' }}</p>
+      </div>
+
+      <div class="skill-section">
+        <h3>Can teach</h3>
+        <div class="skill-tags">
+          {% if user.skills_offered %}
+            {% for skill in user.skills_offered %}
+            <span class="skill-badge offered">{{ skill }}</span>
+            {% endfor %}
+          {% else %}
+            <p class="empty-text">No skills added yet</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="skill-section">
+        <h3>Wants to learn</h3>
+        <div class="skill-tags">
+          {% if user.skills_wanted %}
+            {% for skill in user.skills_wanted %}
+            <span class="skill-badge wanted">{{ skill }}</span>
+            {% endfor %}
+          {% else %}
+            <p class="empty-text">No skills added yet</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

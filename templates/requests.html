@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="requests-page">
+
+  <!-- Page Header -->
+  <div class="requests-header">
+    <div>
+      <h1>Skill Requests</h1>
+      <p>Find someone who needs your skills — or post your own request</p>
+    </div>
+    {% if session.user_id %}
+    <a href="/post-request" class="btn-primary">+ Post a Request</a>
+    {% else %}
+    <a href="/login" class="btn-primary">Login to Post</a>
+    {% endif %}
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <form method="GET" action="/requests">
+      <input type="text" name="search"
+        placeholder="Search requests..."
+        value="{{ search_term }}">
+      <select name="category">
+        <option value="">All Categories</option>
+        <option value="Coding"      {% if category == 'Coding' %}selected{% endif %}>Coding</option>
+        <option value="Design"      {% if category == 'Design' %}selected{% endif %}>Design</option>
+        <option value="Academics"   {% if category == 'Academics' %}selected{% endif %}>Academics</option>
+        <option value="Creative"    {% if category == 'Creative' %}selected{% endif %}>Creative</option>
+        <option value="Soft Skills" {% if category == 'Soft Skills' %}selected{% endif %}>Soft Skills</option>
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+  </div>
+
+  <!-- Requests Grid -->
+  {% for req in requests %}
+<div class="request-card">
+  <div class="request-top">
+    <span class="skill-tag">{{ req.category }}</span>
+    <span class="request-date">{{ req.created_at }}</span>
+  </div>
+  <h3>{{ req.title }}</h3>
+  <p>{{ req.description }}</p>
+
+  {% if req.offering %}
+  <p style="font-size:12px;color:#6c63ff;margin-bottom:12px">
+    🔄 Offering in return: {{ req.offering }}
+  </p>
+  {% endif %}
+
+  <!-- Show offers if this is your post -->
+  {% if session.user_name == req.posted_by and req.offers|length > 0 %}
+  <div style="background:#f9f9ff;border-radius:8px;padding:12px;margin-bottom:12px">
+    <p style="font-size:12px;font-weight:600;color:#6c63ff;margin-bottom:8px">
+      {{ req.offers|length }} offer(s) received:
+    </p>
+    {% for offer in req.offers %}
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee">
+      <span style="font-size:13px;color:#444">{{ offer.user_name }}</span>
+      {% if req.status == 'open' %}
+      <div style="display:flex;gap:6px">
+        <a href="/accept/{{ req._id }}/{{ offer.user_id }}/{{ offer.user_name }}"
+           style="font-size:12px;background:#1a7a3c;color:white;padding:4px 10px;border-radius:6px;text-decoration:none">
+          Accept
+        </a>
+        <a href="/decline/{{ req._id }}/{{ offer.user_id }}"
+           style="font-size:12px;background:#cc0000;color:white;padding:4px 10px;border-radius:6px;text-decoration:none">
+          Decline
+        </a>
+      </div>
+      {% else %}
+      <span style="font-size:12px;color:#1a7a3c;font-weight:600">✓ Accepted</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="request-footer">
+    <div class="request-author">
+      <div class="author-avatar">{{ req.posted_by[0].upper() }}</div>
+      <span>{{ req.posted_by }}</span>
+    </div>
+    {% if req.status == 'matched' %}
+      <span class="your-post-badge" style="background:#e8f5e9;color:#1a7a3c">✓ Matched</span>
+    {% elif session.user_id and session.user_name != req.posted_by %}
+      {% set already = [] %}
+      {% for o in req.offers %}
+        {% if o.user_id == session.user_id %}
+          {% set _ = already.append(1) %}
+        {% endif %}
+      {% endfor %}
+      {% if already|length > 0 %}
+        <span class="your-post-badge">Offer sent ✓</span>
+      {% else %}
+        <a href="/offer/{{ req._id }}" class="btn-small">Offer Help</a>
+      {% endif %}
+    {% elif session.user_name == req.posted_by %}
+      <span class="your-post-badge">Your post</span>
+    {% else %}
+      <a href="/login" class="btn-small">Login to Help</a>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}

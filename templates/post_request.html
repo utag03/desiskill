@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="auth-container">
+  <div class="auth-card" style="max-width:520px">
+
+    <h2>Post a Skill Request</h2>
+    <p class="auth-subtitle">Tell others what you need help with</p>
+
+    {% if error %}
+    <div class="alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/post-request">
+
+      <div class="form-group">
+        <label>What do you need help with?</label>
+        <input type="text" name="title"
+          placeholder="e.g. I need help with Python OOP concepts"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label>Describe your request</label>
+        <textarea name="description" rows="4"
+          placeholder="Explain what you're struggling with, your current level, and what kind of help you need..."
+          style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;outline:none"
+          required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Category</label>
+        <select name="category"
+          style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;outline:none;background:white">
+          <option value="Coding">Coding</option>
+          <option value="Design">Design</option>
+          <option value="Academics">Academics</option>
+          <option value="Creative">Creative</option>
+          <option value="Soft Skills">Soft Skills</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>What can you offer in return? (optional)</label>
+        <input type="text" name="offering"
+          placeholder="e.g. I can help with Figma or Video Editing">
+      </div>
+
+      <button type="submit" class="btn-auth">Post Request</button>
+
+    </form>
+
+    <p class="auth-switch">
+      <a href="/requests">Back to all requests</a>
+    </p>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard">
+
+  <div class="dashboard-header">
+    <h1>Welcome back, {{ user.name }}! 👋</h1>
+    <p>{{ user.college }} · Member since {{ user.created_at }}</p>
+  </div>
+
+  <div class="dashboard-cards">
+    <div class="dash-card">
+      <div class="dash-icon">🎓</div>
+      <h3>Skills I can teach</h3>
+      {% if user.skills_offered %}
+        {% for s in user.skills_offered %}
+        <span class="skill-badge offered">{{ s }}</span>
+        {% endfor %}
+      {% else %}
+        <p>No skills added yet.</p>
+      {% endif %}
+      <a href="/profile" class="btn-small" style="margin-top:12px;display:inline-block">Edit Profile</a>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-icon">📚</div>
+      <h3>Skills I want to learn</h3>
+      {% if user.skills_wanted %}
+        {% for s in user.skills_wanted %}
+        <span class="skill-badge wanted">{{ s }}</span>
+        {% endfor %}
+      {% else %}
+        <p>No skills added yet.</p>
+      {% endif %}
+      <a href="/skills" class="btn-small" style="margin-top:12px;display:inline-block">Browse Skills</a>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-icon">📋</div>
+      <h3>My requests</h3>
+      {% if my_requests %}
+        {% for r in my_requests %}
+        <div style="font-size:13px;padding:6px 0;border-bottom:1px solid #f0f0f0">
+          <strong>{{ r.title }}</strong><br>
+          <span style="color:#888">{{ r.offers|length }} offer(s) received</span>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>No requests posted yet.</p>
+      {% endif %}
+      <a href="/post-request" class="btn-small" style="margin-top:12px;display:inline-block">Post a Request</a>
+    </div>
+  </div>
+  <div class="dash-card">
+  <div class="dash-icon">🤝</div>
+  <h3>My matches</h3>
+  {% if my_matches %}
+    {% for m in my_matches %}
+    <div style="font-size:13px;padding:6px 0;border-bottom:1px solid #f0f0f0">
+      <strong>{{ m.request_title }}</strong><br>
+      <span style="color:#888">
+        {% if m.helped_by == session.user_name %}
+          Helping {{ m.posted_by }}
+        {% else %}
+          {{ m.helped_by }} is helping you
+        {% endif %}
+      </span>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p>No matches yet.</p>
+  {% endif %}
+  <a href="/matches" class="btn-small" style="margin-top:12px;display:inline-block">View Matches</a>
+</div>
+
+  <div class="dashboard-actions">
+    <a href="/requests" class="btn-small">View All Requests</a>
+    &nbsp;
+    <a href="/profile" class="btn-small">Edit Profile</a>
+    &nbsp;
+    <a href="/logout" class="btn-logout">Logout</a>
+  </div>
+
+</div>
+{% endblock %}

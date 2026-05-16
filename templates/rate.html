@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card" style="max-width:480px">
+
+    <h2>Rate your experience</h2>
+    <p class="auth-subtitle">with <strong>{{ other_user }}</strong></p>
+
+    {% if already_rated %}
+    <div class="alert-success">You already rated this exchange!</div>
+    {% else %}
+
+    <form method="POST" action="/rate/{{ match_id }}">
+      <div class="form-group">
+        <label>Rating</label>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          {% for i in [1,2,3,4,5] %}
+          <label style="cursor:pointer">
+            <input type="radio" name="rating" value="{{ i }}" style="display:none">
+            <span class="star" data-val="{{ i }}"
+              style="font-size:32px;color:#ddd;cursor:pointer">★</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Review</label>
+        <textarea name="review" rows="3"
+          placeholder="How was your skill exchange experience?"
+          style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;outline:none;resize:vertical"></textarea>
+      </div>
+
+      <button type="submit" class="btn-auth">Submit Rating</button>
+    </form>
+
+    <script>
+      document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', function() {
+          const val = this.dataset.val;
+          document.querySelectorAll('.star').forEach(s => {
+            s.style.color = s.dataset.val <= val ? '#f5a623' : '#ddd';
+          });
+          this.closest('label').querySelector('input').checked = true;
+        });
+      });
+    </script>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

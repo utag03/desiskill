@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="skills-page">
+
+  <div class="skills-header">
+    <h1>Browse Skills</h1>
+    <p>Find a student who can help you — or offer your own skill</p>
+  </div>
+
+  <!-- SEARCH FORM -->
+  <div class="search-bar">
+    <form method="GET" action="/skills">
+      <input 
+        type="text" 
+        name="search" 
+        placeholder="Search skills e.g. Python, Design..."
+        value="{{ search_term }}"
+      >
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <!-- SKILLS GRID -->
+  {% for skill in skills %}
+<div class="skill-card">
+  <div class="skill-tag">{{ skill.category }}</div>
+  <h3>{{ skill.title }}</h3>
+  <p>{{ skill.description }}</p>
+  <div class="skill-footer">
+    <span class="skill-author">by {{ skill.offered_by }}</span>
+    <a href="#" class="btn-small">Request</a>
+  </div>
+</div>
+{% endfor %}
+
+      {% if skills|length == 0 %}
+      <p class="no-results">No skills found for "{{ search_term }}" — try something else!</p>
+      {% endif %}
+
+    </div>
+
+  </section>
+
+{% endblock %}

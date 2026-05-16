@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="requests-page">
+
+  <div class="requests-header">
+    <div>
+      <h1>My Matches</h1>
+      <p>People you've connected with for skill exchange</p>
+    </div>
+    <a href="/requests" class="btn-primary">Browse Requests</a>
+  </div>
+
+  {% if matches|length == 0 %}
+  <div class="empty-state">
+    <p>No matches yet — offer help on a request to get started!</p>
+    <a href="/requests" class="btn-primary">Browse Requests</a>
+  </div>
+  {% endif %}
+
+  <div class="requests-grid">
+    {% for match in matches %}
+    <div class="request-card">
+      <div class="request-top">
+        <span class="skill-tag">{{ match.category }}</span>
+        <span class="request-date">{{ match.matched_at }}</span>
+      </div>
+      <h3>{{ match.request_title }}</h3>
+
+      <div style="margin:12px 0;padding:12px;background:#f9f9ff;border-radius:8px">
+        <p style="font-size:13px;color:#666;margin:0">
+          {% if match.helped_by == session.user_name %}
+            You are helping <strong>{{ match.posted_by }}</strong>
+          {% else %}
+            <strong>{{ match.helped_by }}</strong> is helping you
+          {% endif %}
+        </p>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="/chat/{{ match._id }}" class="btn-small">💬 Chat</a>
+        <a href="/rate/{{ match._id }}" class="btn-small"
+          style="background:white;color:#6c63ff;border:1.5px solid #6c63ff">⭐ Rate</a>
+      </div>
+
+      {% if match.reviews %}
+      <div style="margin-top:12px;border-top:1px solid #f0f0f0;padding-top:12px">
+        {% for review in match.reviews %}
+        <div style="font-size:13px;color:#666;margin-bottom:6px">
+          <span style="color:#f5a623">{'★' * review.rating}</span>
+          <span style="color:#888;font-size:12px">by {{ review.reviewer }}</span><br>
+          {{ review.comment }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

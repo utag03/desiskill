@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }} — DesiSkill</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- NAVBAR (appears on every page) -->
+  <nav class="navbar">
+  <a href="/" class="nav-brand">DesiSkill</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/skills">Skills</a>
+    <a href="/requests">Requests</a>
+    {% if session.user_id %}
+      <a href="/dashboard">Dashboard</a>
+      <a href="/matches">Matches</a>
+      <a href="/profile">Profile</a>
+      <a href="/logout" class="btn-secondary-sm">Logout</a>
+    {% else %}
+      <a href="/login">Login</a>
+      <a href="/register" class="btn-primary">Join Free</a>
+    {% endif %}
+  </div>
+</nav>
+
+  <!-- EACH PAGE PUTS ITS CONTENT HERE -->
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- FOOTER (appears on every page) -->
+  <footer class="footer">
+    <p>Made with love by students, for students. &copy; 2026 DesiSkill</p>
+  </footer>
+
+</body>
+</html>
