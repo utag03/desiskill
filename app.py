@@ -10,6 +10,12 @@ app.secret_key = 'desiskill_secret_key_2026'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 import os
+
+app = Flask(__name__)
+app.secret_key = 'desiskill_secret_key_2026'
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+# ── Connect to MongoDB ──
 MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')
 client = MongoClient(MONGO_URI)
 db = client['desiskill']
