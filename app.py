@@ -248,7 +248,7 @@ def chat(match_id):
                            messages=messages)
 
 # ── SocketIO events ─────────────────────────────────────────
-socketio = SocketIO(app, async_mode='gevent')
+socketio = SocketIO(app, cors_allowed_origins="*")
 @socketio.on('join')
 def on_join(data):
     join_room(data['room'])
@@ -326,4 +326,4 @@ def seed():
     return 'Seeded! <a href="/skills">View Skills</a>'
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, port=5007)
+    socketio.run(app, debug=False, port=5007)
