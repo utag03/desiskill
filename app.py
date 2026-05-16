@@ -7,7 +7,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'desiskill_secret_key_2026'
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client['desiskill']
