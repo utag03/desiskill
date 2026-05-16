@@ -248,6 +248,7 @@ def chat(match_id):
                            messages=messages)
 
 # ── SocketIO events ─────────────────────────────────────────
+socketio = SocketIO(app, async_mode='gevent')
 @socketio.on('join')
 def on_join(data):
     join_room(data['room'])

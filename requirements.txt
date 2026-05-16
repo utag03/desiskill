@@ -3,4 +3,5 @@ flask-socketio
 flask-bcrypt
 pymongo
 gunicorn
-eventlet
+gevent
+gevent-websocket
